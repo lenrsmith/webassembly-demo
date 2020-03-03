@@ -1,7 +1,16 @@
+void numLog(int n);
+void strLog(char * msg);
+
 int main() { 
   return 42;
 }
 
-int getDoubleNumber(int x) {
-  return x * 2;
+void greet()
+{
+  strLog("Hello from C");
 }
+
+void getDoubleNumber(int x) {
+  strLog( x * 2 );
+}
+

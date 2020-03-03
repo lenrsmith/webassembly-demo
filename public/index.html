@@ -7,17 +7,25 @@
   <body>
     <h1>WebAssembly Demo</<h1>
     <script>
+      // Import JS functions to WASM
+      const imports = {
+        env: {
+          numLog: console.log,
+          strLog: console.log
+        }
+      }
+
       //Load WASM
-      WebAssembly.instantiateStreaming( fetch ('program.wasm') )
+      WebAssembly.instantiateStreaming( fetch ('program.wasm') , imports)
         .then ( wasm => {
           console.log('WASM Ready'  )
 
           window.wasm = wasm;
 
-          // Log all exported functions
-          console.log( WebAssembly.Module.exports(wasm.module))
+          // Log all imported functions
+          console.log(WebAssembly.Module.imports(wasm.module))
 
-          console.log(wasm.instance.exports.getDoubleNumber(80))
+          wasm.instance.exports.getDoubleNumber(33)
         })
     </script>
   </body>

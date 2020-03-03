@@ -7,11 +7,17 @@
   <body>
     <h1>WebAssembly Demo</<h1>
     <script>
+      const readMemoryStr = ( offset, length ) => {
+        const strBuffer = new Uint8Array(wasm.instance.exports.memory.buffer, offset, length)
+        const str = new TextDecoder().decode(strBuffer)
+        console.log(str)
+      }
+
       // Import JS functions to WASM
       const imports = {
         env: {
           numLog: console.log,
-          strLog: console.log
+          strLog: readMemoryStr
         }
       }
 
@@ -20,7 +26,7 @@
         .then ( wasm => {
           console.log('WASM Ready'  )
 
-          window.wasm = wasm;
+          window.wasm = wasm
 
           // Log all imported functions
           console.log(WebAssembly.Module.imports(wasm.module))

@@ -8,8 +8,12 @@
     <h1>WebAssembly Demo</<h1>
     <p id="message"></p>
     <script>
+      // Initialize wasm custom memory (array buffer)
+      // 2 pages: 2 * 64kb (128kb)
+      const wasmMemory = new WebAssembly.Memory( { initial: 2})
+
       const readMemoryStr = ( offset, length ) => {
-        const strBuffer = new Uint8Array(wasm.instance.exports.memory.buffer, offset, length)
+        const strBuffer = new Uint8Array(wasmMemory.buffer, offset, length)
         const str = new TextDecoder().decode(strBuffer)
 
         // Notify and make use of string
@@ -26,7 +30,8 @@
       const imports = {
         env: {
           numLog: console.log,
-          strLog: readMemoryStr
+          strLog: readMemoryStr,
+          memory: wasmMemory
         }
       }
 

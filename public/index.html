@@ -6,12 +6,21 @@
   </head>
   <body>
     <h1>WebAssembly Demo</<h1>
+    <p id="message"></p>
     <script>
       const readMemoryStr = ( offset, length ) => {
         const strBuffer = new Uint8Array(wasm.instance.exports.memory.buffer, offset, length)
         const str = new TextDecoder().decode(strBuffer)
-        console.log(str)
+
+        // Notify and make use of string
+        window.dispatchEvent( new CustomEvent('wasmValue', {detail: str}) )
       }
+
+      // List for wasm strings
+      window.addEventListener('wasmValue', str => {
+        console.log('Received a new string from C: ', str.detail)
+        document.getElementById('message').innerHTML = str.detail
+      })
 
       // Import JS functions to WASM
       const imports = {
